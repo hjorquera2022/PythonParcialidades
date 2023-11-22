@@ -1,0 +1,222 @@
+import os
+
+CARPETA_REVISORES = 'W:\\Revisores\\01 PARCIALIDADES'
+CARPETA_CONTROLDOCUMENTAL = 'W:\\ControlDocumental\\01 RECIBIDA'
+parcialidades = ['0000-00 ADMINISTRACION',
+'0000-00 FABRICACION Y MONTAJE',
+'0000-00 GENERAL',
+'0000-00 MEMOS',
+'0000-02 ING GENERAL',
+'0001-01 INGENIERIA BASICA',
+'0002-01 PAVIMENTACION AREA AVIONES',
+'0003-01 PROYECTO DE ARQUITECTURA GENERAL',
+'0004-01 PROYECTO GENERAL ESTRUCTURA',
+'0005-01 PROYECTO VIAL GENERAL',
+'0006-01 CAMBIO SERVICIO GENERAL',
+'0007-01 SANEAMIENTO GRAL Y DRENAJE',
+'0008-01 PROYECTO GENERAL AP Y ALC',
+'0009-01 VENTILACION Y CLIMATIZACION GENERAL',
+'0010-01 PROYECTO GENERAL GAS',
+'0011-01 PROYECTO GENERAL PID PIE',
+'0012-01 PROYECTO GENERAL ELX',
+'0013-01 PROYECTO GENERAL ELD',
+'0014-01 AMPLIACION PLANTA ALC',
+'0015-01 AMPLIACION PLANTA APO PIE',
+'0016-01 AMPLIACION PLANTA TERMICA',
+'0017-01 AMPLIACION SEL',
+'0018-01 PASARELA AL CENTRO TRANSPORTE TERRESTRE CTR',
+'0019-01 PROYECTO PAISAJISMO GENERAL',
+'0020-01 PROYECTO CIERROS DE SEGURIDAD',
+'0021-01 PROYECTO GENERAL SENALETICA INTERIOR',
+'0022-01 PROYECTO OBRAS ARTISTICAS Y CULTURALES',
+'0023-01 ESTACIONAMIENTO REMOTO SUR',
+'0024-01 VIALIDAD SUR PONIENTE CD CV',
+'0025-01 EST CAMIONES SAG ELX MDS PAV SAN TOP',
+'0025-02 EST CAMIONES SAG ARQ VIA PAI',
+'0026-01 ESTACIONAMIENTOS SECTOR SUPERFICIE',
+'0027-01 ESTACIONAMIENTO PDI CARABINEROS',
+'0028-01 ESTACIONAMIENTO RENT A CAR',
+'0029-00 T2M GENERAL',
+'0029-01 T2M ARQ FUNCIONAL',
+'0029-02 T2M STR STM CUERPO A',
+'0029-03 T2M STR STM CUERPO B',
+'0029-04 T2M STR STM CUERPO C',
+'0029-05 T2M STR STM CUERPO D',
+'0029-06 T2M STR STM CUERPO E',
+'0029-07 T2M STR STM CUERPO F',
+'0029-08 T2M STR STM CUERPO G',
+'0029-09 T2M STR STM CUERPO H',
+'0029-10 T2M FACHADA',
+'0029-11 T2M TECHUMBRE Y CUBIERTA',
+'0029-12 T2M EQM',
+'0029-13 T2M PBB EQA',
+'0029-14-01 T2M BHS ELECTROMECANICO',
+'0029-14-02 T2M BHS RADIERES',
+'0029-14-03 T2M BHS MEZZANINA',
+'0029-15 T2M CLIMA',
+'0029-16 T2M ELX',
+'0029-17 T2M DRE ALC PIE GAS APO',
+'0029-18 T2M SAS FIDS CUSS CUPPS',
+'0029-19 T2M ELD ELA PID',
+'0029-20 T2M ARQ TERMINACIONES',
+'0031-00 (hasta el 10-10-17)',
+'0031-01 VIADUCTO STR STM',
+'0031-02 VIADUCTO VIALIDAD TERMINACIONES',
+'0033-01 ESPIGON PONIENTE A',
+'0034-00 (Hasta el 10-10-2017)',
+'0034-00 (Hasta el 28-10-2021)',
+'0034-01 REMODELACION T1 ARQ FUNCIONAL',
+'0034-02 REMODELACION T1 CRITERIOS DE DISENO',
+'0034-03 REMODELACION T1 ORIENTE',
+'0034-04 REMODELACION T1 CENTRO',
+'0034-05 REMODELACION T1 SUR',
+'0034-06 REMODELACION T1 PONIENTE',
+'0034-07 REMODELACION T1 SALA DE BASURAS',
+'0034-08 REMODELACION T1 PRE PUENTES DE EMBARQUE',
+'0034-09 REMODELACION T1 PLATAFORMA',
+'0034-10 REMODELACION T1 INFRAESTRUCTURA',
+'0035-01 CENTRO TRANSPORTE TERRESTRE',
+'0036-00 (hasta el 10-10-17)',
+'0037-01 EDIFICIO PDI',
+'0038-01 EDIFICIO CARABINEROS',
+'0039-01 ING INSTALACIONES FAENAS SERVICIOS',
+'0040-01 BIM',
+'0041-01 GALERIA TECNICA',
+'0050-01 PROYECTO CHECK IN DGC 1540',
+'030C-00 (hasta el 10-10-17)',
+'030C-01 T2C ARQ FUNCIONAL',
+'030C-02 T2C ESPIGON C STR STM',
+'030C-03 T2C FACHADA',
+'030C-04 T2C TECHUMBRE Y CUBIERTA',
+'030C-05 T2C EQM',
+'030C-06 T2C PBB',
+'030C-07 T2C CLIMA',
+'030C-08 T2C ELX',
+'030C-09 T2C ALC APO DRE GAS PIE',
+'030C-10 T2C SAS FIDS CUSS CUPPS',
+'030C-11 T2C ELD ELA PID',
+'030C-12 T2C ARQ TERMINACIONES',
+'030D-00',
+'030D-01 T2D ARQ FUNCIONAL',
+'030D-02 T2D STR STM PILOTES',
+'030D-03 T2D STR STM MODULOS 1-2-3',
+'030D-04 T2D CORREDOR BD',
+'030D-05 T2D CORREDOR D',
+'030D-06 T2D FACHADA',
+'030D-07 T2D TECHUMBRE Y CUBIERTA',
+'030D-08 T2D EQM',
+'030D-09 T2D PBB',
+'030D-10 T2D CLIMA',
+'030D-11 T2D ELX',
+'030D-12 T2D DRE ALC APO PIE GAS',
+'030D-13 T2D SAS FIDS CUSS CUPPS',
+'030D-14 T2D ELD ELA PID',
+'030D-15 T2D ARQ TERMINACIONES',
+'030E-00 GENERAL',
+'030E-01 T2E ARQ FUNCIONAL',
+'030E-02 T2E STR STM',
+'030E-03 T2E FACHADA',
+'030E-04 T2E TECHUMBRE Y CUBIERTA',
+'030E-05 T2E EQM',
+'030E-06 T2E PBB',
+'030E-07 T2E CLIMA',
+'030E-08 T2E ELX',
+'030E-09 T2E ALC DRE APO PIE  GAS',
+'030E-10 T2E SAS FIDS CUSS CUPPS',
+'030E-11 T2E ELD ELA PID',
+'030E-12 T2E ARQ TERMINACIONES',
+'030F-01 T2F ARQ FUNCIONAL',
+'030F-02 T2F STR STM PILOTES',
+'030F-03 T2F STR STM MODULOS 1-2-3',
+'030F-04 T2F CORREDOR F',
+'030F-05 T2F FACHADA',
+'030F-06 T2F TECHUMBRE Y CUBIERTA',
+'030F-07 T2F EQM',
+'030F-08 T2F PBB',
+'030F-09 T2F CLIMA',
+'030F-10 T2F ELX',
+'030F-11 T2F SAS FIDS CUSS CUPPS',
+'030F-12 T2F DRE ALC APO PIE GAS',
+'030F-13 T2F ELD ELA PID',
+'030F-14 T2F ARQ TERMINACIONES',
+'032ESO-01 EST ORIENTE',
+'032ESP-00 GENERAL',
+'032ESP-01 EST PONIENTE ARQ FUNCIONAL',
+'032ESP-02-01 EST PONIENTE PILOTES',
+'032ESP-02-02 EST PONIENTE STR STM',
+'032ESP-03 EST PONIENTE FACHADA',
+'032ESP-04 EST PONIENTE TECHUMBRE Y CUBIERTA',
+'032ESP-05 EST PONIENTE EQM',
+'032ESP-06 EST PONIENTE CLIMA',
+'032ESP-07 EST PONIENTE ELX',
+'032ESP-08 EST PONIENTE DRE ALC APO PIE GAS',
+'032ESP-09 EST PONIENTE ELD ELA PID',
+'032ESP-10 EST PONIENTE ARQ TERMINACIONES',
+'032ESP-ESO-00 (hasta el 10-10-17)',
+'036O-01 PUNTOS SEGURIDAD ORIENTE',
+'036P-01 PUNTOS SEGURIDAD PONIENTE']
+
+# Iterar sobre las carpetas en la lista de parcialidades
+for parcialidad in parcialidades:
+
+    # Crear la ruta de la carpeta de la parcialidad
+    carpeta_parcialidad = os.path.join(CARPETA_REVISORES, parcialidad)
+    
+    # Verificar si la carpeta de la parcialidad existe
+    if os.path.isdir(carpeta_parcialidad):
+        # Iterar sobre las subcarpetas que tienen el formato 61-7897-08-01-21
+        for subdir in os.listdir(carpeta_parcialidad):
+            if os.path.isdir(os.path.join(carpeta_parcialidad, subdir)) and len(subdir.split('-')) == 5:
+                #print('Encontrada subcarpeta:', subdir) # Encontrada subcarpeta: 61-7897-08-01-21
+                codigo_parcialidad = subdir.split('-')[0] + '-' + subdir.split('-')[1]
+
+                if len(codigo_parcialidad) == 7:
+                     codigo_parcialidad = '00'+codigo_parcialidad
+                
+                if len(codigo_parcialidad) == 8:
+                     codigo_parcialidad = '0'+codigo_parcialidad    
+
+                anio = subdir.split('-')[4][0:2]
+                formato_carpeta = 'C-NP-{}-{}'.format(codigo_parcialidad, anio) #subdir.split('-')[2]
+                #print('codigo_parcialidad:', codigo_parcialidad) #codigo_parcialidad: 0061-7897
+                #print(os.path.join( formato_carpeta )) # C-NP-0061-7897-21
+                carpeta_documental = os.path.join( CARPETA_CONTROLDOCUMENTAL,'20'+anio,formato_carpeta )
+                if os.path.isdir(carpeta_documental):
+                      # Iterar sobre las subcarpetas que tienen el formato C-NP-0061-7897-21
+                       for subdirDocumental in os.listdir(carpeta_documental):
+                           #print('Encontrada subcarpetaDocumental:', subdirDocumental)  #Encontrada subcarpetaDocumental: BIM
+                           if subdirDocumental == 'BIM':
+                               print( carpeta_parcialidad,',',subdir , ',', carpeta_documental, ',', subdirDocumental)
+
+
+#W:\Revisores\01 PARCIALIDADES\0014-01 AMPLIACION PLANTA ALC \, 1055-10036-29-06-22 \, W:\ControlDocumental\01 RECIBIDA\2022\C-NP-1055-10036-22 \, BIM
+#W:\Revisores\01 PARCIALIDADES\0014-01 AMPLIACION PLANTA ALC \, 2605-9471-23-12-21 \, W:\ControlDocumental\01 RECIBIDA\2021\C-NP-2605-9471-21 \, BIM
+#W:\Revisores\01 PARCIALIDADES\0014-01 AMPLIACION PLANTA ALC \, 61-7897-08-01-21 \, W:\ControlDocumental\01 RECIBIDA\2021\C-NP-0061-7897-21 \, BIM
+#W:\Revisores\01 PARCIALIDADES\0014-01 AMPLIACION PLANTA ALC \, 808-9924-18-05-22 \, W:\ControlDocumental\01 RECIBIDA\2022\C-NP-0808-9924-22 \, BIM
+
+
+
+#Encontrada subcarpeta: 61-7897-08-01-21
+#codigo_parcialidad: 0061-7897
+#C-NP-0061-7897-21
+#Encontrada subcarpetaDocumental BIM: W:\Revisores\01 PARCIALIDADES\0014-01 AMPLIACION PLANTA ALC 61-7897-08-01-21 W:\ControlDocumental\01 RECIBIDA\2021\C-NP-0061-7897-21 BIM
+
+
+
+#Encontrada subcarpeta: 61-7897-08-01-21
+#codigo_parcialidad: 0061-7897
+#C-NP-0061-7897-21
+#Encontrada subcarpetaDocumental: 1426. PC-CJV-PAS-X-X-ALC-CR-1148-01 SIGNE NPU.pdf
+#Encontrada subcarpetaDocumental: 1426. PC-CJV-PAS-X-X-ALC-CR-1148-01-ITF con presupuestos.pdf
+#Encontrada subcarpetaDocumental: 2020-12-23 SCL-NPU-08386 PAS  Instalment of new sludge dewatering system  blower position  FCR 1148 y 0007 FOLIOS 1426 y 0421  Partiality 14-01 (003).docx
+#Encontrada subcarpetaDocumental: 421. PC-CJV-PAS-X-X-ALC-CR-0007-01 SIGNE NPU.pdf
+#Encontrada subcarpetaDocumental: BIM
+#Encontrada subcarpetaDocumental: C-NP-0061-7897-21.pdf
+#Encontrada subcarpetaDocumental: Instrucciones-AIF.pdf
+#Encontrada subcarpetaDocumental: Listado PAS.xlsx
+#Encontrada subcarpetaDocumental: Listado Planos PAS-ID-2020.12.xlsx
+#Encontrada subcarpetaDocumental: PAS-ALC
+#Encontrada subcarpetaDocumental: PAS-ELX
+#Encontrada subcarpetaDocumental: PAS-GEN
+#Encontrada subcarpetaDocumental: PAS-PIE
+#Encontrada subcarpetaDocumental: PAS-STR
